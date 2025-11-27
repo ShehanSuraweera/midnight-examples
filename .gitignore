@@ -18,7 +18,7 @@ build/
 # TypeScript
 *.tsbuildinfo
 
-# Environment variables
+# Environment variables - NEVER COMMIT THESE!
 .env
 .env.local
 .env.*.local
@@ -43,3 +43,6 @@ logs/
 
 # OS
 Thumbs.db
+
+# Keep example files
+!.env.example
