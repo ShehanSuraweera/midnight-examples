@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-midnight-950 via-midnight-900 to-midnight-800 min-h-screen text-white;
+    margin: 0;
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white/10 backdrop-blur-lg rounded-xl border border-white/20 shadow-2xl;
+  }
+  
+  .btn-primary {
+    @apply bg-midnight-500 hover:bg-midnight-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply bg-white/10 hover:bg-white/20 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-white/30 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .input {
+    @apply bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-midnight-500 focus:border-transparent transition-all;
+  }
+}
+
+@import "tailwindcss";
+
+@theme {
+  --color-midnight-50: #f0f0ff;
+  --color-midnight-100: #e5e5ff;
+  --color-midnight-200: #d0d0ff;
+  --color-midnight-300: #a8a8ff;
+  --color-midnight-400: #7676ff;
+  --color-midnight-500: #4a4aff;
+  --color-midnight-600: #2d2df7;
+  --color-midnight-700: #1e1ee0;
+  --color-midnight-800: #1919b3;
+  --color-midnight-900: #14148c;
+  --color-midnight-950: #0a0a40;
+}
