@@ -1,0 +1,26 @@
+{
+  "circuits": [
+    {
+      "name": "storeMessage",
+      "pure": false,
+      "arguments": [
+        {
+          "name": "customMessage",
+          "type": {
+            "type-name": "Opaque",
+            "tsType": "string"
+          }
+        }
+      ],
+      "result-type": {
+        "type-name": "Tuple",
+        "types": [
+        ]
+      }
+    }
+  ],
+  "witnesses": [
+  ],
+  "contracts": [
+  ]
+}
