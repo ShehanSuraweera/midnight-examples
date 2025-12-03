@@ -183,6 +183,8 @@ await Rx.firstValueFrom(
 
     console.log("✅ Connected to contract\n");
 
+    console.log("Wallet Address:", walletState.address);
+
     // Main menu loop
     let running = true;
     while (running) {

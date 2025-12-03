@@ -6,6 +6,7 @@ A privacy-preserving decentralized application (DApp) built on the Midnight bloc
 
 - [Overview](#🌙-overview)
 - [Quick Start (Clone & Run)](#🚀-quick-start-for-developers-cloning-this-repo)
+- [Frontend Web Interface](#🌐-frontend-web-interface)
 - [Understanding Midnight Network](#📚-understanding-midnight-network)
 - [Installation Guide (Detailed)](#🛠️-installation)
 - [Project Structure](#📁-project-structure)
@@ -25,10 +26,12 @@ Midnight Network apps use zero-knowledge proofs to maintain data confidentiality
 This application showcases:
 - Smart contract deployment on Midnight Testnet
 - Zero-knowledge proof generation for transactions
-- Wallet integration and management
+- Wallet integration and management (CLI and Web UI)
 - Reading and writing to blockchain state
 - Transaction submission and tracking
 - Token transfers (tDUST)
+- Privacy-preserving message storage with selective disclosure
+- **Modern React frontend** with Lace wallet integration
 - Privacy-preserving message storage with selective disclosure
 
 ---
@@ -223,9 +226,88 @@ After initial setup, you'll commonly use these commands:
 
 ---
 
-## 📚 Understanding Midnight Network
+## 🌐 Frontend Web Interface
 
-Continue reading to learn more about how Midnight works and what this project demonstrates.
+In addition to the CLI, this project includes a beautiful React + Vite frontend that provides a user-friendly web interface for interacting with your Midnight smart contract.
+
+### ✨ Frontend Features
+
+- **🎨 Modern UI**: Beautiful gradient design with Tailwind CSS
+- **🔗 Lace Wallet Integration**: Connect with browser extension
+- **📝 Message Management**: Store and retrieve messages visually
+- **⚡ Real-time Updates**: Automatic blockchain state updates
+- **📱 Responsive Design**: Works on desktop and mobile
+- **🎓 Educational**: Built-in explanations of ZKPs and privacy tech
+
+### 🚀 Quick Start (Frontend)
+
+```bash
+# Navigate to frontend directory
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+The frontend will be available at `http://localhost:5173`
+
+### 📋 Frontend Setup Steps
+
+1. **Deploy the Contract First**
+   ```bash
+   # From root directory
+   npm run deploy
+   ```
+
+2. **Copy Deployment Info**
+   ```bash
+   # Copy contract address to frontend
+   cp deployment.json frontend/public/deployment.json
+   ```
+
+3. **Install Lace Wallet**
+   - Install [Lace extension](https://chromewebstore.google.com/detail/lace-beta/hgeekaiplokcnmakghbdfbgnlfheichg)
+   - Create/import wallet
+   - Get tDUST from [faucet](https://midnight.network/test-faucet)
+
+4. **Launch Frontend**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+5. **Connect & Interact**
+   - Open http://localhost:5173
+   - Click "Connect Wallet"
+   - Store and read messages!
+
+### 🎯 Frontend vs CLI
+
+| Feature | Frontend (Web UI) | CLI (Terminal) |
+|---------|------------------|----------------|
+| **User Experience** | Visual, intuitive | Command-line |
+| **Wallet** | Lace browser extension | Seed phrase |
+| **Best For** | End users, demos | Developers, automation |
+| **Message Storage** | ✅ Yes | ✅ Yes |
+| **Message Reading** | ✅ Yes | ✅ Yes |
+| **Token Transfers** | 🚧 Coming soon | ✅ Yes |
+| **Transaction Details** | 🚧 Coming soon | ✅ Yes |
+
+### 📱 Frontend UI Components
+
+The frontend includes:
+- **Wallet Connection Panel**: Shows address, balance, connection status
+- **Message Display Card**: Current blockchain message with refresh
+- **Message Submission Form**: Store new messages (280 char limit)
+- **Info Sections**: ZKP education, how it works, resources
+- **Responsive Layout**: Beautiful on all screen sizes
+
+### 🔗 Frontend Documentation
+
+For detailed frontend documentation, see [frontend/README.md](frontend/README.md)
 
 ---
 
@@ -485,7 +567,7 @@ This starts the interactive CLI with the following options:
 
 ## 📁 Project Structure
 
-This project follows the standard Midnight Network app structure:
+This project follows the standard Midnight Network app structure with both CLI and web frontend:
 
 ```
 my-mn-app/
@@ -496,6 +578,43 @@ my-mn-app/
 │   │   └── storeMessage.verifier
 │   ├── managed/                      # Compiled contract artifacts
 │   │   └── hello-world/
+│   │       ├── compiler/             # Intermediate compiler files
+│   │       │   └── contract-info.json
+│   │       ├── contract/             # Compiled contract for deployment
+│   │       │   ├── index.cjs
+│   │       │   └── index.d.cts
+│   │       ├── keys/                 # Cryptographic keys
+│   │       └── zkir/                 # Zero-Knowledge IR
+│   └── zkir/                         # ZK Intermediate Representation
+│       ├── storeMessage.bzkir
+│       └── storeMessage.zkir
+├── src/
+│   ├── cli.ts                       # Interactive CLI application
+│   └── deploy.ts                    # Contract deployment script
+├── frontend/                         # React + Vite Web UI ✨ NEW
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── WalletConnect.tsx   # Lace wallet integration
+│   │   │   ├── MessageForm.tsx     # Message submission UI
+│   │   │   └── MessageDisplay.tsx  # Message display UI
+│   │   ├── services/
+│   │   │   └── midnight.ts         # Blockchain API service
+│   │   ├── types/
+│   │   │   └── midnight.ts         # TypeScript definitions
+│   │   ├── App.tsx                 # Main application
+│   │   └── index.css               # Tailwind styles
+│   ├── public/
+│   │   └── deployment.json         # Contract info (copy from root)
+│   ├── package.json
+│   ├── tailwind.config.js
+│   └── README.md                   # Frontend documentation
+├── midnight-level-db/               # Private state storage
+├── deployment.json                  # Deployed contract information
+├── .env.example                     # Environment variables template
+├── package.json                     # Project dependencies
+├── tsconfig.json                    # TypeScript configuration
+└── README.md                        # This file
+```
 │   │       ├── compiler/             # Intermediate compiler files
 │   │       │   └── contract-info.json
 │   │       ├── contract/             # Compiled contract for deployment
