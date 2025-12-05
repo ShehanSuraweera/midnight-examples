@@ -194,8 +194,8 @@ await Rx.firstValueFrom(
       console.log("3. Exit");
       console.log("4. Send tDUST");
       console.log("5. Show wallet balance");
-  console.log("6. Show transaction details by hash");
-console.log("7. Show transaction details by identifier");
+      console.log("6. Show transaction details by hash");
+      console.log("7. Show transaction details by identifier");
 
       const choice = await rl.question("\nYour choice: ");
 

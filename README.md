@@ -44,7 +44,7 @@ This application showcases:
 
 ```bash
 git clone https://github.com/ShehanSuraweera/midnight-examples.git
-cd midnight-examples/my-mn-app
+cd midnight-examples
 ```
 
 ### Step 2: Install System Prerequisites
@@ -570,7 +570,7 @@ This starts the interactive CLI with the following options:
 This project follows the standard Midnight Network app structure with both CLI and web frontend:
 
 ```
-my-mn-app/
+/
 ├── contracts/
 │   ├── hello-world.compact          # Compact smart contract source
 │   ├── keys/                         # ZK proof keys (proving & verifying)
