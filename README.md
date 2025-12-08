@@ -40,16 +40,9 @@ This application showcases:
 
 **New to Midnight?** Follow this section to get up and running quickly!
 
-### Step 1: Clone the Repository
+### Prerequisites
 
-```bash
-git clone https://github.com/ShehanSuraweera/midnight-examples.git
-cd midnight-examples
-```
-
-### Step 2: Install System Prerequisites
-
-Before running this project, you need:
+Before you begin, ensure you have:
 
 1. **Node.js** (v18 or higher) - [Download Node.js](https://nodejs.org/)
    ```bash
@@ -78,41 +71,16 @@ Before running this project, you need:
    - Create a wallet and save your seed phrase securely
    - Get test tokens from [Midnight Faucet](https://midnight.network/test-faucet/)
 
-### Step 3: Install Project Dependencies
+### Running the Application
+
+Follow these steps to get the application running:
+
+#### Step 1: Start the Proof Server
+
+Open a terminal window and run the proof server (keep this running):
 
 ```bash
-npm install
-```
-
-This installs all required Midnight SDK packages and TypeScript dependencies.
-
-### Step 4: Set Up Environment Variables
-
-Create your `.env` file from the example:
-
-```bash
-cp .env.example .env
-```
-
-**Option A: Use the deployment script to generate a wallet seed**
-- Leave the `.env` file empty for now
-- The deployment script will generate a seed and display it
-- Copy the generated seed to your `.env` file
-
-**Option B: Use an existing wallet seed**
-- If you already have a Midnight wallet seed, add it to `.env`:
-  ```env
-  WALLET_SEED=your_64_character_hex_seed_here
-  ```
-
-⚠️ **Security Warning:** Never commit your `.env` file! It's already in `.gitignore`.
-
-### Step 5: Start the Proof Server
-
-Open a **new terminal window** and run:
-
-```bash
-docker run -p 6300:6300 midnightnetwork/proof-server -- 'midnight-proof-server --network testnet'
+docker run -p 6300:6300 midnightnetwork/proof-server:4.0.0 -- 'midnight-proof-server --network testnet'
 ```
 
 **Keep this terminal running** - the proof server generates zero-knowledge proofs needed for all contract interactions.
@@ -122,25 +90,46 @@ Verify it's running:
 curl http://127.0.0.1:6300/health
 ```
 
-### Step 6: Compile the Contract
+#### Step 2: Clone the Repository
+
+Open a new terminal and clone the repository:
 
 ```bash
-npm run compile
+git clone git@github.com:ShehanSuraweera/midnight-examples.git
+cd midnight-examples
 ```
 
-This compiles the Compact smart contract and generates ZK circuits, cryptographic keys, and TypeScript APIs.
+#### Step 3: Navigate to CLI Directory
 
-**What happens:** The `contracts/hello-world.compact` file is compiled into the `contracts/managed/hello-world/` directory.
+```bash
+cd cli
+```
 
-### Step 7: Build the TypeScript Code
+#### Step 4: Install Dependencies
+
+```bash
+npm install
+```
+
+This installs all required Midnight SDK packages and TypeScript dependencies.
+
+#### Step 5: Compile the Contract
+
+```bash
+compact compile contracts/hello-world.compact contracts/managed/hello-world
+```
+
+This compiles the Compact smart contract and generates ZK circuits, cryptographic keys, and TypeScript APIs in the `contracts/managed/hello-world/` directory.
+
+#### Step 6: Build the TypeScript Code
 
 ```bash
 npm run build
 ```
 
-This compiles `src/deploy.ts` and `src/cli.ts` into JavaScript in the `dist/` directory.
+This compiles the TypeScript source files (`src/deploy.ts` and `src/cli.ts`) into JavaScript in the `dist/` directory.
 
-### Step 8: Deploy the Contract
+#### Step 7: Deploy the Contract
 
 ```bash
 npm run deploy
@@ -150,7 +139,7 @@ npm run deploy
 1. If no wallet seed in `.env`, the script will ask if you have one
 2. Choose "n" to generate a new seed
 3. **SAVE THE DISPLAYED SEED** - you'll need it!
-4. Copy the seed to your `.env` file
+4. Copy the seed to your `.env` file in the `cli` directory
 5. The script shows your wallet address
 6. Visit [Midnight Faucet](https://midnight.network/test-faucet/) and paste your address
 7. Wait for tDUST tokens to arrive (check in terminal)
@@ -163,7 +152,7 @@ npm run deploy
 
 The contract address is saved to `deployment.json`.
 
-### Step 9: Interact with Your Contract
+#### Step 8: Interact with Your Contract
 
 ```bash
 npm run cli
@@ -173,11 +162,11 @@ The interactive CLI provides these options:
 
 1. **Store message** - Write a message to the blockchain
 2. **Read current message** - Retrieve the stored message
-3. **Exit** - Close the application
-4. **Send tDUST** - Transfer tokens to another address
-5. **Show wallet balance** - Display your tDUST balance
-6. **Show transaction details by hash** - Query transaction info
-7. **Show transaction details by identifier** - Alternative query method
+3. **Send tDUST** - Transfer tokens to another address
+4. **Show wallet balance** - Display your tDUST balance
+5. **Show transaction details by hash** - Query transaction info
+6. **Show transaction details by identifier** - Alternative query method
+7. **Exit** - Close the application
 
 ### 🎉 Success!
 
@@ -192,15 +181,15 @@ You've successfully:
 Here's the typical development workflow you just completed:
 
 ```
-1. Clone Repo
+1. Start Proof Server (Docker)
    ↓
-2. Install Dependencies (npm install)
+2. Clone Repo
    ↓
-3. Setup Environment (.env file)
+3. Navigate to CLI Directory (cd cli)
    ↓
-4. Start Proof Server (Docker)
+4. Install Dependencies (npm install)
    ↓
-5. Compile Contract (npm run compile)
+5. Compile Contract (compact compile)
    ↓
 6. Build TypeScript (npm run build)
    ↓
@@ -213,11 +202,11 @@ Here's the typical development workflow you just completed:
 
 ### 🔄 Quick Command Reference
 
-After initial setup, you'll commonly use these commands:
+After initial setup, you'll commonly use these commands from the `cli` directory:
 
 | Command | Purpose | When to Use |
 |---------|---------|-------------|
-| `npm run compile` | Compile Compact contract | After changing `.compact` file |
+| `compact compile contracts/hello-world.compact contracts/managed/hello-world` | Compile Compact contract | After changing `.compact` file |
 | `npm run build` | Compile TypeScript | After changing `.ts` files |
 | `npm run deploy` | Deploy new contract | First time or new version |
 | `npm run cli` | Interact with contract | Testing & usage |
@@ -258,14 +247,15 @@ The frontend will be available at `http://localhost:5173`
 
 1. **Deploy the Contract First**
    ```bash
-   # From root directory
+   # From root directory, navigate to cli folder
+   cd cli
    npm run deploy
    ```
 
 2. **Copy Deployment Info**
    ```bash
-   # Copy contract address to frontend
-   cp deployment.json frontend/public/deployment.json
+   # Copy contract address from cli to frontend
+   cp cli/deployment.json frontend/public/deployment.json
    ```
 
 3. **Install Lace Wallet**
@@ -276,6 +266,7 @@ The frontend will be available at `http://localhost:5173`
 4. **Launch Frontend**
    ```bash
    cd frontend
+   npm install
    npm run dev
    ```
 
@@ -482,7 +473,7 @@ Download and install Docker Desktop for your operating system:
 Start the proof server in your terminal:
 
 ```bash
-docker run -p 6300:6300 midnightnetwork/proof-server -- 'midnight-proof-server --network testnet'
+docker run -p 6300:6300 midnightnetwork/proof-server:4.0.0 -- 'midnight-proof-server --network testnet'
 ```
 
 **Note:** This command occupies the terminal window while running. Keep it running in a separate terminal.
@@ -504,26 +495,24 @@ The Compact VS Code extension provides helpful syntax highlighting and code snip
 
 ### Project Setup
 
-### 1. Install Dependencies
+⚠️ **Note:** This project uses a monorepo structure with separate `cli` and `frontend` directories. All CLI commands should be run from the `cli` directory.
+
+### 1. Navigate to CLI Directory
+
+```bash
+cd cli
+```
+
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2. Set Up Environment Variables (Optional)
-
-Create a `.env` file in the project root:
-
-```env
-WALLET_SEED=your_64_character_hex_seed_here
-```
-
-If you don't provide a seed, the deployment script will generate one for you.
-
 ### 3. Compile the Contract
 
 ```bash
-npm run compile
+compact compile contracts/hello-world.compact contracts/managed/hello-world
 ```
 
 This compiles the `hello-world.compact` contract and generates necessary artifacts in `contracts/managed/hello-world/`.
@@ -567,91 +556,99 @@ This starts the interactive CLI with the following options:
 
 ## 📁 Project Structure
 
-This project follows the standard Midnight Network app structure with both CLI and web frontend:
+This project follows a monorepo structure with separate CLI and frontend applications:
 
 ```
 /
-├── contracts/
-│   ├── hello-world.compact          # Compact smart contract source
-│   ├── keys/                         # ZK proof keys (proving & verifying)
-│   │   ├── storeMessage.prover
-│   │   └── storeMessage.verifier
-│   ├── managed/                      # Compiled contract artifacts
-│   │   └── hello-world/
-│   │       ├── compiler/             # Intermediate compiler files
-│   │       │   └── contract-info.json
-│   │       ├── contract/             # Compiled contract for deployment
-│   │       │   ├── index.cjs
-│   │       │   └── index.d.cts
-│   │       ├── keys/                 # Cryptographic keys
-│   │       └── zkir/                 # Zero-Knowledge IR
-│   └── zkir/                         # ZK Intermediate Representation
-│       ├── storeMessage.bzkir
-│       └── storeMessage.zkir
-├── src/
-│   ├── cli.ts                       # Interactive CLI application
-│   └── deploy.ts                    # Contract deployment script
-├── frontend/                         # React + Vite Web UI ✨ NEW
+├── cli/                              # CLI Application Directory
+│   ├── contracts/
+│   │   ├── hello-world.compact      # Compact smart contract source
+│   │   └── managed/                 # Compiled contract artifacts
+│   │       └── hello-world/
+│   │           ├── compiler/        # Intermediate compiler files
+│   │           │   └── contract-info.json
+│   │           ├── contract/        # Compiled contract for deployment
+│   │           │   ├── index.cjs
+│   │           │   └── index.d.cts
+│   │           ├── keys/            # Cryptographic keys (proving & verifying)
+│   │           │   ├── storeMessage.prover
+│   │           │   └── storeMessage.verifier
+│   │           └── zkir/            # Zero-Knowledge IR
+│   │               ├── storeMessage.bzkir
+│   │               └── storeMessage.zkir
+│   ├── src/
+│   │   ├── cli.ts                   # Interactive CLI application
+│   │   └── deploy.ts                # Contract deployment script
+│   ├── midnight-level-db/           # Private state storage (LevelDB)
+│   ├── deployment.json               # Deployed contract information
+│   ├── package.json                  # CLI dependencies
+│   └── tsconfig.json                 # TypeScript configuration
+│
+├── frontend/                         # React + Vite Web UI
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── WalletConnect.tsx   # Lace wallet integration
-│   │   │   ├── MessageForm.tsx     # Message submission UI
-│   │   │   └── MessageDisplay.tsx  # Message display UI
+│   │   │   ├── WalletConnect.tsx    # Lace wallet integration
+│   │   │   ├── MessageForm.tsx      # Message submission UI
+│   │   │   └── MessageDisplay.tsx   # Message display UI
 │   │   ├── services/
-│   │   │   └── midnight.ts         # Blockchain API service
+│   │   │   └── midnight.ts          # Blockchain API service
 │   │   ├── types/
-│   │   │   └── midnight.ts         # TypeScript definitions
-│   │   ├── App.tsx                 # Main application
-│   │   └── index.css               # Tailwind styles
+│   │   │   └── midnight.ts          # TypeScript definitions
+│   │   ├── App.tsx                  # Main application
+│   │   ├── App.css                  # Application styles
+│   │   ├── main.tsx                 # Entry point
+│   │   └── index.css                # Tailwind styles
 │   ├── public/
-│   │   └── deployment.json         # Contract info (copy from root)
-│   ├── package.json
-│   ├── tailwind.config.js
-│   └── README.md                   # Frontend documentation
-├── midnight-level-db/               # Private state storage
-├── deployment.json                  # Deployed contract information
-├── .env.example                     # Environment variables template
-├── package.json                     # Project dependencies
-├── tsconfig.json                    # TypeScript configuration
-└── README.md                        # This file
-```
-│   │       ├── compiler/             # Intermediate compiler files
-│   │       │   └── contract-info.json
-│   │       ├── contract/             # Compiled contract for deployment
-│   │       │   ├── index.cjs
-│   │       │   └── index.d.cts
-│   │       ├── keys/                 # Cryptographic keys
-│   │       └── zkir/                 # Zero-Knowledge IR
-│   └── zkir/                         # ZK Intermediate Representation
-│       ├── storeMessage.bzkir
-│       └── storeMessage.zkir
-├── src/
-│   ├── cli.ts                       # Interactive CLI application
-│   └── deploy.ts                    # Contract deployment script
-├── midnight-level-db/               # Private state storage
-├── deployment.json                  # Deployed contract information
-├── package.json                     # Project dependencies
-├── tsconfig.json                    # TypeScript configuration
-└── README.md                        # This file
+│   │   └── deployment.json          # Contract info (copy from cli/)
+│   ├── index.html                    # HTML template
+│   ├── package.json                  # Frontend dependencies
+│   ├── tsconfig.json                 # TypeScript configuration
+│   ├── vite.config.ts                # Vite configuration
+│   └── README.md                     # Frontend documentation
+│
+├── README.md                         # Main documentation (this file)
+└── SETUP_GUIDE.md                    # Detailed setup instructions
 ```
 
 ### Directory Breakdown
 
-- **`contracts/`**: Contains the Compact smart contract source code
-  - **`hello-world.compact`**: The main contract file
-  - **`keys/`**: Cryptographic proving and verifying keys for zero-knowledge proofs
-  - **`managed/hello-world/`**: Generated artifacts from compilation
-    - **`contract/`**: Compiled contract artifacts (JSON files for deployment and TypeScript APIs)
-    - **`keys/`**: Stores cryptographic keys
-    - **`zkir/`**: Zero-Knowledge Intermediate Representation bridging Compact to ZK backend
-    - **`compiler/`**: Intermediate files used during build process
-  - **`zkir/`**: Additional ZK intermediate representation files
+#### CLI Directory (`/cli`)
 
-- **`src/`**: TypeScript source files for the DApp
+Contains all the command-line interface components and contract deployment logic:
+
+- **`contracts/`**: Smart contract source and compiled artifacts
+  - **`hello-world.compact`**: The main Compact smart contract file
+  - **`managed/hello-world/`**: Generated artifacts from compilation
+    - **`contract/`**: Compiled contract ready for deployment with TypeScript APIs
+    - **`keys/`**: Cryptographic proving and verifying keys for zero-knowledge proofs
+    - **`zkir/`**: Zero-Knowledge Intermediate Representation files
+    - **`compiler/`**: Intermediate build files
+
+- **`src/`**: TypeScript source files for CLI operations
   - **`cli.ts`**: Interactive command-line interface for contract interaction
-  - **`deploy.ts`**: Script for deploying the contract to the blockchain
+  - **`deploy.ts`**: Script for deploying contracts to Midnight Testnet
 
 - **`midnight-level-db/`**: LevelDB database for storing private state locally
+
+- **`deployment.json`**: Contains deployed contract address and metadata
+
+#### Frontend Directory (`/frontend`)
+
+Modern React application with Lace wallet integration:
+
+- **`src/components/`**: Reusable React components
+  - **`WalletConnect.tsx`**: Handles Lace wallet connection and state
+  - **`MessageForm.tsx`**: UI for submitting new messages
+  - **`MessageDisplay.tsx`**: Displays current blockchain message
+
+- **`src/services/`**: Backend integration services
+  - **`midnight.ts`**: Midnight blockchain API wrapper
+
+- **`src/types/`**: TypeScript type definitions
+  - **`midnight.ts`**: Type definitions for Midnight SDK
+
+- **`public/`**: Static assets served by Vite
+  - **`deployment.json`**: Copy of contract deployment info (from cli/)
 
 ## 📝 Smart Contract
 
@@ -732,18 +729,15 @@ Compiling a Compact contract transforms high-level logic into zero-knowledge cir
 
 ### Compile Command
 
-```bash
-npm run compile
-```
+From the `cli` directory:
 
-This runs:
 ```bash
 compact compile contracts/hello-world.compact contracts/managed/hello-world
 ```
 
 ### Generated Artifacts
 
-The compilation generates the following structure in `contracts/managed/hello-world/`:
+The compilation generates the following structure in `cli/contracts/managed/hello-world/`:
 
 - **`contract/`**: Compiled contract artifacts including JSON files for deployment and frontend integration
 - **`keys/`**: Cryptographic proving and verifying keys for zero-knowledge proofs
@@ -982,7 +976,7 @@ const contractModulePath = path.join(
 );
 
 if (!fs.existsSync(contractModulePath)) {
-  console.error("Contract not found! Run: npm run compile");
+  console.error("Contract not found! Run: compact compile contracts/hello-world.compact contracts/managed/hello-world");
   process.exit(1);
 }
 
@@ -1819,18 +1813,20 @@ compact --version
 
 **Solution:**
 ```bash
-# Clean install
+# Clean install (from cli directory)
+cd cli
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-#### "Contract not found! Run: npm run compile"
+#### "Contract not found! Run: compact compile..."
 
 **Problem:** Contract hasn't been compiled yet.
 
 **Solution:**
 ```bash
-npm run compile
+# From cli directory
+compact compile contracts/hello-world.compact contracts/managed/hello-world
 npm run build
 ```
 
@@ -1840,7 +1836,7 @@ npm run build
 
 **Solution:**
 ```bash
-# Make sure proof server is running first
+# From cli directory, make sure proof server is running first
 npm run deploy
 ```
 
@@ -1997,10 +1993,10 @@ Use this checklist to ensure you've completed all setup steps:
 - [ ] Compact compiler installed (`compact --version`)
 - [ ] Lace wallet created with test tokens
 - [ ] Repository cloned
+- [ ] Navigated to CLI directory (`cd cli`)
 - [ ] Dependencies installed (`npm install`)
-- [ ] `.env` file created from `.env.example`
-- [ ] Proof server running (separate terminal)
-- [ ] Contract compiled (`npm run compile`)
+- [ ] Proof server running (separate terminal with version 4.0.0)
+- [ ] Contract compiled (`compact compile contracts/hello-world.compact contracts/managed/hello-world`)
 - [ ] TypeScript built (`npm run build`)
 - [ ] Contract deployed (`npm run deploy`)
 - [ ] CLI tested (`npm run cli`)
