@@ -183,8 +183,12 @@ async function main() {
       },
     };
 
+
+
     // Configure all required providers
     console.log("Setting up providers...");
+    const zkConfigPath = path.join(contractPath, "managed", "hello-world");
+    console.log(zkConfigPath)
     const providers = {
       privateStateProvider: levelPrivateStateProvider({
         privateStateStoreName: "hello-world-state",
@@ -193,7 +197,7 @@ async function main() {
         TESTNET_CONFIG.indexer,
         TESTNET_CONFIG.indexerWS
       ),
-      zkConfigProvider: new NodeZkConfigProvider(contractPath),
+      zkConfigProvider: new NodeZkConfigProvider(zkConfigPath),
       proofProvider: httpClientProofProvider(TESTNET_CONFIG.proofServer),
       walletProvider: walletProvider,
       midnightProvider: walletProvider,

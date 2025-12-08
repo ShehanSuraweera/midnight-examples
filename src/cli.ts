@@ -167,7 +167,7 @@ await Rx.firstValueFrom(
         TESTNET_CONFIG.indexer,
         TESTNET_CONFIG.indexerWS
       ),
-      zkConfigProvider: new NodeZkConfigProvider(contractPath),
+      zkConfigProvider: new NodeZkConfigProvider(zkConfigPath),
       proofProvider: httpClientProofProvider(TESTNET_CONFIG.proofServer),
       walletProvider: walletProvider,
       midnightProvider: walletProvider,
@@ -196,6 +196,10 @@ await Rx.firstValueFrom(
       console.log("5. Show wallet balance");
       console.log("6. Show transaction details by hash");
       console.log("7. Show transaction details by identifier");
+      console.log("8. Show wallet address");
+      console.log("9. Show coin public key");
+      console.log("10. Show full wallet state");
+
 
       const choice = await rl.question("\nYour choice: ");
 
@@ -262,6 +266,28 @@ await Rx.firstValueFrom(
   await showTransactionDetailsByIdentifier(identifier);
   break;
 }
+
+  case "8":{
+    // show wallet address
+    const walletState = await Rx.firstValueFrom(wallet.state());
+    console.log(`\nWallet Address: ${walletState.address}\n`);
+    break;
+  }
+  case "9": {
+    // show coin public key
+    const walletState = await Rx.firstValueFrom(wallet.state());
+    console.log(`\nCoin Public Key: ${walletState.coinPublicKey}\n`);
+    break;
+  }
+  case "10": {
+    // show all wallet details
+    const walletState = await Rx.firstValueFrom(wallet.state());
+    console.log(`\nFull Wallet State:\n${JSON.stringify(walletState, (key, value) =>
+      typeof value === 'bigint' ? value.toString() : value
+    , 2)}\n`);
+    
+    break;
+  }
 
         default:
           console.log("Invalid choice. Please enter 1, 2, 3, 4, 5, 6, or 7.\n");
