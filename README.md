@@ -44,11 +44,11 @@ This application showcases:
 
 Before you begin, ensure you have:
 
-1. **Node.js** (v18 or higher) - [Download Node.js](https://nodejs.org/)
+1. **Node.js** (v20 or higher) - [Download Node.js](https://nodejs.org/)
    ```bash
    # Verify installation
-   node --version  # Should be v18.x or higher
-   npm --version   # Should be v9.x or higher
+   node --version  # Should be v20.x or higher
+   npm --version   # Should be v11.x or higher
    ```
 
 2. **Docker Desktop** - [Download Docker](https://www.docker.com/products/docker-desktop/)

@@ -63,7 +63,7 @@ async function main() {
     console.log("\nConnecting to Midnight network...");
 
     // Build wallet from seed (per docs)
-    const wallet = await WalletBuilder.buildFromSeed(
+    const wallet = await WalletBuilder.build(
       TESTNET_CONFIG.indexer,
       TESTNET_CONFIG.indexerWS,
       TESTNET_CONFIG.proofServer,

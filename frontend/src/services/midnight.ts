@@ -1,5 +1,5 @@
-// Simple demonstration API for interacting with the deployed contract
-// Note: For a full implementation, you would need the actual Midnight SDK integration
+
+
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 const INDEXER_URL = 'https://indexer.testnet-02.midnight.network/api/v1/graphql';
@@ -242,28 +242,29 @@ export async function connectLaceWallet(): Promise<{ address: string; balance: s
 
     console.log('Wallet state:', state);
 
+let balance: bigint = BigInt(0);
+    if (walletApi.balances) {
+      const balances = await walletApi.balances();
+      balance = balances.unshielded + balances.shielded;
+    } else if (typeof state.balance === 'number') {
+      balance = BigInt(state.balance);
+    } else if (typeof state.balance === 'string') {
+      balance = BigInt(state.balance);
+    } 
+
+  const balanceStr = balance.toString();
+
+  console.log(`Your wallet balance is: ${balanceStr} tDUST`);
+
     // Extract address and balance from state
     const address = state.shieldedAddress || state.address || 'Unknown';
     
-    // Get balance - try multiple methods
-    let balance = '0';
     
-    if (state.balance !== undefined) {
-      balance = state.balance.toString();
-    } else if (state.balances) {
-      // Get native token balance (tDUST)
-      const nativeTokenBalance = state.balances[''] || state.balances['native'] || 0n;
-      balance = nativeTokenBalance.toString();
-    } else if (walletApi.getBalance) {
-      balance = await walletApi.getBalance();
-    } else if (walletApi.balances) {
-      const balances = await walletApi.balances();
-      balance = (balances.shielded + balances.unshielded).toString();
-    }
 
-    console.log('Wallet connected:', { address, balance, state });
 
-    return { address, balance };
+    console.log('Wallet connected:', { address, balance: balanceStr, state });
+
+    return { address, balance: balanceStr };
   } catch (error) {
     console.error('Failed to connect to Lace wallet:', error);
     throw error;
@@ -421,5 +422,9 @@ export async function queryTransactionByIdentifier(identifier: string): Promise<
   } catch (error) {
     console.error('Failed to query transaction:', error);
     return null;
+  }
+
+  function nativeToken() {
+    throw new Error("Function not implemented.");
   }
 }

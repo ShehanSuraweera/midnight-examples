@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@midnight-ntwrk/midnight-js-types": "^2.1.0",
+    "@midnight-ntwrk/zswap": "^4.0.0",
     "@tailwindcss/postcss": "^4.1.17",
     "autoprefixer": "^10.4.22",
     "lucide-react": "^0.555.0",

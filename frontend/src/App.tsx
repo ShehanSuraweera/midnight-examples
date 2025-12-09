@@ -1,14 +1,34 @@
-import { Moon, Github, ExternalLink, Info, Zap, Shield, Eye } from 'lucide-react';
-import { useState } from 'react';
-import WalletConnect from './components/WalletConnect';
-import MessageForm from './components/MessageForm';
-import MessageDisplay from './components/MessageDisplay';
-import { submitMessage } from './services/midnight';
+import {
+  Moon,
+  Github,
+  ExternalLink,
+  Info,
+  Zap,
+  Shield,
+  Eye,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+import WalletConnect from "./components/WalletConnect";
+import MessageForm from "./components/MessageForm";
+import MessageDisplay from "./components/MessageDisplay";
+import { submitMessage, getContractInfo } from "./services/midnight";
 
 function App() {
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState<string>();
   const [balance, setBalance] = useState<string>();
+  const [contractAddress, setContractAddress] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadContractInfo();
+  }, []);
+
+  const loadContractInfo = async () => {
+    const info = await getContractInfo();
+    if (info) {
+      setContractAddress(info.contractAddress);
+    }
+  };
 
   const handleConnect = (addr: string, bal: string) => {
     setConnected(true);
@@ -19,14 +39,14 @@ function App() {
   const handleSubmitMessage = async (message: string) => {
     // In a real implementation, this would interact with the Lace wallet
     // and submit a transaction to the Midnight network
-    console.log('Submitting message:', message);
-    
-    const success = await submitMessage(message);
-    
+    console.log("Submitting message:", message);
+
+    const success = await submitMessage(message, contractAddress || "");
+
     if (success) {
-      alert('Message submitted successfully! (Demo mode - check console)');
+      alert("Message submitted successfully! (Demo mode - check console)");
     } else {
-      alert('Failed to submit message');
+      alert("Failed to submit message");
     }
   };
 
@@ -49,7 +69,7 @@ function App() {
                 </p>
               </div>
             </div>
-            
+
             <a
               href="https://github.com/ShehanSuraweera/midnight-examples"
               target="_blank"
@@ -68,9 +88,10 @@ function App() {
               <div>
                 <h3 className="font-semibold mb-2">About This DApp</h3>
                 <p className="text-white/70 text-sm leading-relaxed">
-                  This is a demonstration of Midnight Network's privacy-preserving technology.
-                  Store and retrieve messages on the blockchain using zero-knowledge proofs.
-                  Your interactions are secured by ZKPs, ensuring data confidentiality while
+                  This is a demonstration of Midnight Network's
+                  privacy-preserving technology. Store and retrieve messages on
+                  the blockchain using zero-knowledge proofs. Your interactions
+                  are secured by ZKPs, ensuring data confidentiality while
                   maintaining verifiability.
                 </p>
               </div>
@@ -86,7 +107,8 @@ function App() {
             </div>
             <h3 className="font-semibold mb-2">Zero-Knowledge Proofs</h3>
             <p className="text-white/60 text-sm">
-              Transactions are validated without revealing sensitive data, ensuring privacy by default.
+              Transactions are validated without revealing sensitive data,
+              ensuring privacy by default.
             </p>
           </div>
 
@@ -96,7 +118,8 @@ function App() {
             </div>
             <h3 className="font-semibold mb-2">Selective Disclosure</h3>
             <p className="text-white/60 text-sm">
-              Choose what information to reveal while keeping other data private on the blockchain.
+              Choose what information to reveal while keeping other data private
+              on the blockchain.
             </p>
           </div>
 
@@ -106,7 +129,8 @@ function App() {
             </div>
             <h3 className="font-semibold mb-2">Fast & Secure</h3>
             <p className="text-white/60 text-sm">
-              Transactions are processed quickly while maintaining the highest security standards.
+              Transactions are processed quickly while maintaining the highest
+              security standards.
             </p>
           </div>
         </div>
@@ -160,10 +184,7 @@ function App() {
           {/* Message Interaction */}
           <div className="lg:col-span-2 space-y-6">
             <MessageDisplay />
-            <MessageForm
-              onSubmit={handleSubmitMessage}
-              disabled={!connected}
-            />
+            <MessageForm onSubmit={handleSubmitMessage} disabled={!connected} />
           </div>
         </div>
 
@@ -177,7 +198,8 @@ function App() {
               </div>
               <h4 className="font-semibold mb-2">Connect Wallet</h4>
               <p className="text-white/60 text-sm">
-                Use your Lace Midnight wallet to authenticate and interact with the DApp.
+                Use your Lace Midnight wallet to authenticate and interact with
+                the DApp.
               </p>
             </div>
 
@@ -187,7 +209,8 @@ function App() {
               </div>
               <h4 className="font-semibold mb-2">Write Message</h4>
               <p className="text-white/60 text-sm">
-                Enter your message that you want to store on the Midnight blockchain.
+                Enter your message that you want to store on the Midnight
+                blockchain.
               </p>
             </div>
 
@@ -197,7 +220,8 @@ function App() {
               </div>
               <h4 className="font-semibold mb-2">Generate Proof</h4>
               <p className="text-white/60 text-sm">
-                A zero-knowledge proof is generated to validate your transaction privately.
+                A zero-knowledge proof is generated to validate your transaction
+                privately.
               </p>
             </div>
 
@@ -207,7 +231,8 @@ function App() {
               </div>
               <h4 className="font-semibold mb-2">On-Chain Storage</h4>
               <p className="text-white/60 text-sm">
-                Your message is permanently stored on the blockchain with privacy guarantees.
+                Your message is permanently stored on the blockchain with
+                privacy guarantees.
               </p>
             </div>
           </div>
@@ -217,7 +242,7 @@ function App() {
         <footer className="mt-12 text-center text-white/50 text-sm">
           <p>Built with 🌙 on Midnight Network</p>
           <p className="mt-2">
-            Learn more about privacy-preserving DApps at{' '}
+            Learn more about privacy-preserving DApps at{" "}
             <a
               href="https://midnight.network/"
               target="_blank"
@@ -234,4 +259,3 @@ function App() {
 }
 
 export default App;
-
